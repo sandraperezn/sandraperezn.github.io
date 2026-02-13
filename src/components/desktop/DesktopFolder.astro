@@ -1,0 +1,86 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  icon: string;
+  x: number;
+  y: number;
+  openByDefault?: boolean;
+}
+
+const { id, title, icon, x, y, openByDefault = false } = Astro.props;
+---
+
+<div
+  class="desktop-folder"
+  data-folder-id={id}
+  data-open-default={openByDefault ? "true" : "false"}
+  style={`left: ${x}px; top: ${y}px;`}
+>
+  <div class="folder-icon-wrapper">
+    <span class="folder-icon">{icon}</span>
+    <span class="folder-label">{title}</span>
+  </div>
+</div>
+
+<style>
+  .desktop-folder {
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    z-index: 1;
+    touch-action: none;
+  }
+
+  .folder-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.15s;
+    min-width: 80px;
+  }
+
+  .folder-icon-wrapper:hover {
+    background: rgba(213, 96, 29, 0.1);
+  }
+
+  .desktop-folder.selected .folder-icon-wrapper {
+    background: rgba(213, 96, 29, 0.15);
+    outline: 1px solid rgba(213, 96, 29, 0.3);
+  }
+
+  .folder-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  .folder-label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.7rem;
+    color: var(--color-primary);
+    text-align: center;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 640px) {
+    .folder-icon {
+      font-size: 2rem;
+    }
+    .folder-label {
+      font-size: 0.65rem;
+    }
+    .folder-icon-wrapper {
+      min-width: 70px;
+      padding: 6px 8px;
+    }
+  }
+</style>
