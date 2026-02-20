@@ -148,12 +148,29 @@ const { id, title, width = "600px", height = "450px", defaultOpen = false } = As
 
   .window-content {
     flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
     padding: 16px 20px;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.8rem;
     color: var(--color-secondary);
+  }
+
+  .window-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .window-content::-webkit-scrollbar-track {
+    background: rgba(100, 100, 100, 0.1);
+    border-radius: 4px;
+  }
+
+  .window-content::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.3);
+    border-radius: 4px;
+  }
+
+  .window-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 100, 100, 0.5);
   }
 
   .window-resize-handle {

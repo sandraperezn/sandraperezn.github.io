@@ -1,0 +1,380 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+
+interface Project {
+  title: string;
+  description: string;
+  image?: string;
+  link?: string;
+  engine?: string;
+  language?: string;
+  year?: string;
+  field?: string;
+  tags?: string[];
+}
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+
+// Extract unique filter values
+const engines = [...new Set(projects.map((p) => p.engine).filter(Boolean))] as string[];
+const languages = [...new Set(projects.map((p) => p.language).filter(Boolean))] as string[];
+const years = [...new Set(projects.map((p) => p.year).filter(Boolean))].sort().reverse() as string[];
+const fields = [...new Set(projects.map((p) => p.field).filter(Boolean))] as string[];
+const allTags = [...new Set(projects.flatMap((p) => p.tags || []).filter(Boolean))] as string[];
+---
+
+<div class="project-gallery" id="project-gallery">
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all" data-category="all">All</button>
+
+    {engines.length > 0 && (
+      <div class="filter-section" data-section="engine">
+        <button class="filter-title" data-toggle="engine">
+          <span>Engine</span>
+          <svg class="chevron" viewBox="0 0 24 24" width="12" height="12">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <div class="filter-tags" data-tags="engine">
+          {engines.map((engine) => (
+            <button
+              class="filter-btn filter-engine"
+              data-filter={engine.toLowerCase()}
+              data-category="engine"
+            >
+              {engine}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {languages.length > 0 && (
+      <div class="filter-section" data-section="language">
+        <button class="filter-title" data-toggle="language">
+          <span>Language</span>
+          <svg class="chevron" viewBox="0 0 24 24" width="12" height="12">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <div class="filter-tags" data-tags="language">
+          {languages.map((lang) => (
+            <button
+              class="filter-btn filter-language"
+              data-filter={lang.toLowerCase()}
+              data-category="language"
+            >
+              {lang}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {years.length > 0 && (
+      <div class="filter-section" data-section="year">
+        <button class="filter-title" data-toggle="year">
+          <span>Year</span>
+          <svg class="chevron" viewBox="0 0 24 24" width="12" height="12">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <div class="filter-tags" data-tags="year">
+          {years.map((year) => (
+            <button
+              class="filter-btn filter-year"
+              data-filter={year}
+              data-category="year"
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {fields.length > 0 && (
+      <div class="filter-section" data-section="field">
+        <button class="filter-title" data-toggle="field">
+          <span>Field</span>
+          <svg class="chevron" viewBox="0 0 24 24" width="12" height="12">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <div class="filter-tags" data-tags="field">
+          {fields.map((field) => (
+            <button
+              class="filter-btn filter-field"
+              data-filter={field.toLowerCase()}
+              data-category="field"
+            >
+              {field}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {allTags.length > 0 && (
+      <div class="filter-section" data-section="tag">
+        <button class="filter-title" data-toggle="tag">
+          <span>Other</span>
+          <svg class="chevron" viewBox="0 0 24 24" width="12" height="12">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <div class="filter-tags" data-tags="tag">
+          {allTags.map((tag) => (
+            <button
+              class="filter-btn filter-tag"
+              data-filter={tag.toLowerCase()}
+              data-category="tag"
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+
+  <!-- Gallery Grid -->
+  <div class="gallery-grid">
+    {projects.map((project) => (
+      <ProjectCard {...project} />
+    ))}
+  </div>
+
+  <div class="gallery-count">
+    <span class="text-secondary">$</span> ls projects/ | showing <span id="visible-count">{projects.length}</span> of {projects.length}
+  </div>
+</div>
+
+<style>
+  .project-gallery {
+    width: 100%;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.15);
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .filter-section {
+    position: relative;
+  }
+
+  .filter-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    background: transparent;
+    border: 1px solid rgba(100, 100, 100, 0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .filter-title:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .filter-title .chevron {
+    transition: transform 0.2s;
+  }
+
+  .filter-section.open .filter-title .chevron {
+    transform: rotate(180deg);
+  }
+
+  .filter-section.open .filter-title {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .filter-tags {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--color-surface);
+    border: 1px solid rgba(100, 100, 100, 0.2);
+    border-radius: 8px;
+    padding: 6px;
+    min-width: 100px;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .filter-section.open .filter-tags {
+    display: flex;
+  }
+
+  .filter-btn {
+    font-size: 0.65rem;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(100, 100, 100, 0.2);
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .filter-btn.active {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+  }
+
+  .filter-engine.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+  }
+
+  .filter-language.active {
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .filter-year.active {
+    background: #ca8a04;
+    border-color: #ca8a04;
+  }
+
+  .filter-field.active {
+    background: #ec4899;
+    border-color: #ec4899;
+  }
+
+  .filter-tag.active {
+    background: #a855f7;
+    border-color: #a855f7;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 4px 0;
+  }
+
+  .gallery-count {
+    margin-top: 16px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(100, 100, 100, 0.15);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const gallery = document.getElementById("project-gallery");
+    if (!gallery) return;
+
+    const filterBtns = gallery.querySelectorAll<HTMLButtonElement>(".filter-btn");
+    const filterTitles = gallery.querySelectorAll<HTMLButtonElement>(".filter-title");
+    const filterSections = gallery.querySelectorAll<HTMLElement>(".filter-section");
+    const cards = gallery.querySelectorAll<HTMLElement>(".project-card");
+    const countEl = gallery.querySelector("#visible-count");
+
+    // Toggle dropdown sections
+    filterTitles.forEach((title) => {
+      title.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const section = title.closest(".filter-section");
+        if (!section) return;
+
+        // Close other sections
+        filterSections.forEach((s) => {
+          if (s !== section) s.classList.remove("open");
+        });
+
+        // Toggle current section
+        section.classList.toggle("open");
+      });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".filter-section")) {
+        filterSections.forEach((s) => s.classList.remove("open"));
+      }
+    });
+
+    // Filter logic
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const filter = btn.dataset.filter || "all";
+        const category = btn.dataset.category || "all";
+
+        // Toggle active state
+        filterBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        // Close all dropdowns after selection
+        filterSections.forEach((s) => s.classList.remove("open"));
+
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          let show = false;
+
+          if (filter === "all") {
+            show = true;
+          } else if (category === "engine") {
+            show = card.dataset.engine === filter;
+          } else if (category === "language") {
+            show = card.dataset.language === filter;
+          } else if (category === "year") {
+            show = card.dataset.year === filter;
+          } else if (category === "field") {
+            show = card.dataset.field === filter;
+          } else if (category === "tag") {
+            const cardTags = card.dataset.tags?.split(",") || [];
+            show = cardTags.includes(filter);
+          }
+
+          if (show) {
+            card.classList.remove("hidden");
+            visibleCount++;
+          } else {
+            card.classList.add("hidden");
+          }
+        });
+
+        if (countEl) countEl.textContent = String(visibleCount);
+      });
+    });
+  });
+</script>

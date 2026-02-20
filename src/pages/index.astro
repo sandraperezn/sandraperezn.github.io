@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import SocialMediaIcons from "../components/SocialMediaIcons.astro";
 import MatrixBackground from "../components/MatrixBackground.astro";
-import ProjectItem from "../components/ProjectItem.astro";
+import ProjectGallery from "../components/ProjectGallery.astro";
 import BaseHead from "../components/BaseHead.astro";
 import { sortMDByDate } from "../utils";
 import TerminalHeader from "../components/ui/TerminalHeader.astro";
@@ -39,19 +39,104 @@ const techStack: Record<string, string> = {
 const projects: Array<{
   title: string;
   description: string;
-  link: string;
-  icon: string;
+  image?: string;
+  link?: string;
+  engine?: string;
+  language?: string;
+  year?: string;
+  field?: string;
+  tags?: string[];
 }> = [
   {
-    title: "terminus",
-    description: "a minimalist astro template for developers",
-    link: "https://github.com/ojoanalogo/terminus-astro-template",
-    icon: "💻",
+    title: "Hold Up",
+    description: "A cozy productivity game about meeting deadlines",
+    engine: "Unity",
+    language: "C#", 
+    year: "2023-2024",
+    field: "Programming",
+    tags: ["Game Jam"],
+    link: "",
   },
   {
-    title: "Another Project",
-    description: "Add your own projects here",
-    icon: "💻",
+    title: "Makinado",
+    description: "This very site — built with Astro & Tailwind",
+    engine: "Astro",
+    language: "TypeScript",
+    year: "2026",
+    field: "Programming",
+    tags: ["Web"],
+    link: "https://github.com/sandraperezn/sandraperezn.github.io",
+  },
+  {
+    title: "SDL Arcade Game",
+    description: "Add your own project here",
+    engine: "Godot",
+    language: "GDScript",
+    year: "2025",
+    field: "Design",
+    link: "",
+  },
+  {
+    title: "Boulder Dash Remake",
+    description: "Add your own project here",
+    engine: "Unreal",
+    language: "C++",
+    year: "2025",
+    field: "Art",
+    link: "",
+  },
+  {
+    title: "Shelf Control",
+    description: "Add your own project here",
+    engine: "Unity",
+    language: "C#",
+    year: "2025",
+    field: "Programming",
+    link: "",
+  },
+  {
+    title: "Mechanic for Cocoon",
+    description: "Add your own project here",
+    engine: "Godot",
+    language: "GDScript",
+    year: "2024",
+    field: "Art",
+    link: "",
+  },
+  {
+    title: "Card Game",
+    description: "Add your own project here",
+    engine: "Illustrator",
+    language: "GDScript",
+    year: "2024",
+    field: "Art",
+    link: "",
+  },
+  {
+    title: "Card Game",
+    description: "Add your own project here",
+    engine: "Illustrator",
+    language: "GDScript",
+    year: "2024",
+    field: "Art",
+    link: "",
+  },
+  {
+    title: "Card Game",
+    description: "Add your own project here",
+    engine: "Illustrator",
+    language: "GDScript",
+    year: "2024",
+    field: "Art",
+    link: "",
+  },
+  {
+    title: "Card Game",
+    description: "Add your own project here",
+    engine: "Illustrator",
+    language: "GDScript",
+    year: "2024",
+    field: "Art",
     link: "",
   },
 ];
@@ -130,15 +215,9 @@ const projects: Array<{
       <!-- ═══ Windows ═══ -->
 
       <!-- About Me Window -->
-      <DesktopWindow id="about" title="terminal - ssh guest@terminus" width="650px" height="480px" defaultOpen={true}>
+      <DesktopWindow id="about" title="about me" width="650px" height="480px" defaultOpen={true}>
         <div class="text-xs">
           <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-300 dark:border-gray-600">
-            <div class="flex gap-2" role="img" aria-label="Terminal dots">
-              <div class="w-2 h-2 rounded-full bg-red-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-yellow-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-green-500 opacity-60"></div>
-            </div>
-            <span class="text-muted text-xs ml-2 hidden sm:inline">~/about_me</span>
           </div>
 
           <div class="space-y-4 sm:space-y-2">
@@ -148,35 +227,35 @@ const projects: Array<{
                   🪴 hello <span class="text-primary font-medium" style="color: var(--color-primary);">visitor</span>
                 </h1>
                 <p class="text-muted text-xs">
-                  this is terminus, an astro template
+                  welcome to my cv portfolio
                 </p>
               </div>
             </div>
 
             <div class="bg-gray-200/50 dark:bg-gray-500/10 rounded-lg p-3 mb-4">
               <p class="text-primary leading-relaxed" style="color: var(--color-primary);">
-                you're supossed to write something interesting here, but is up to you
+                i'm sandra, a 3rd year game dev student based in barcelona who loves penguins books and videogames
               </p>
             </div>
 
             <Divider class="mb-2" />
 
-            <InfoRow label="location">the internet 🛜</InfoRow>
-            <InfoRow label="main hobby">vibecoding</InfoRow>
+            <InfoRow label="location">barcelona</InfoRow>
+            <InfoRow label="main hobby">reading 📖 and gaming 🎮 </InfoRow>
             <InfoRow label="current project">
               <ExternalLink href="https://google.com" label="Visit Google">
-                world domination
+                meet your deathline
               </ExternalLink>
             </InfoRow>
             <InfoRow label="main interests">
-              science, coding, claude, startups
+              creative projects, tech, videogames, journaling
             </InfoRow>
             <InfoRow label="contact">
               <a
                 class="text-accent hover:underline focus:outline-none"
-                href="mailto:hello@youremail.com"
+                href="mailto:sandrapereznvs@gmail.com"
                 aria-label="Send email to site author"
-              >hello@youremail.com</a>
+              >sandrapereznvs@gmail.com</a>
             </InfoRow>
             <InfoRow label="social">
               <SocialMediaIcons />
@@ -190,39 +269,13 @@ const projects: Array<{
       </DesktopWindow>
 
       <!-- Projects Window -->
-      <DesktopWindow id="projects" title="~/projects" width="600px" height="400px">
-        <div class="text-xs">
-          <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-300 dark:border-gray-600">
-            <div class="flex gap-2">
-              <div class="w-2 h-2 rounded-full bg-red-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-yellow-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-green-500 opacity-60"></div>
-            </div>
-            <span class="text-muted text-xs ml-2 hidden sm:inline">~/projects</span>
-          </div>
-
-          <SectionHeading>💻 your projects</SectionHeading>
-          <div class="space-y-2" role="list">
-            {projects.map((project, index) => (
-              <ProjectItem
-                title={project.title}
-                description={project.description}
-                link={project.link}
-                icon={project.icon}
-                index={index}
-              />
-            ))}
-          </div>
-
-          <div class="mt-3 pt-2 border-t border-gray-300 dark:border-gray-700 text-muted text-xs">
-            <span class="text-secondary">$</span> ls -la projects/ | total {projects.length}
-          </div>
-        </div>
+      <DesktopWindow id="projects" title="~/projects" width="800px" height="600px">
+        <ProjectGallery projects={projects} />
       </DesktopWindow>
 
       <!-- Blog Window -->
       {allPosts.length > 0 && (
-        <DesktopWindow id="blog" title="~/blog" width="600px" height="420px">
+        <DesktopWindow id="experience" title="~/blog" width="600px" height="420px">
           <div class="text-xs">
             <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-300 dark:border-gray-600">
               <div class="flex gap-2">
@@ -245,15 +298,7 @@ const projects: Array<{
 
       <!-- Contact Window -->
       <DesktopWindow id="contact" title="~/contact" width="500px" height="350px">
-        <div class="text-xs">
-          <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-300 dark:border-gray-600">
-            <div class="flex gap-2">
-              <div class="w-2 h-2 rounded-full bg-red-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-yellow-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-green-500 opacity-60"></div>
-            </div>
-            <span class="text-muted text-xs ml-2 hidden sm:inline">~/contact</span>
-          </div>
+
 
           <SectionHeading>📬 get in touch</SectionHeading>
 
