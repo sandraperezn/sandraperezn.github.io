@@ -1,5 +1,6 @@
 ---
 interface Props {
+  id: string;
   title: string;
   description: string;
   image?: string;
@@ -9,9 +10,10 @@ interface Props {
   year?: string;
   field?: string;
   tags?: string[];
+  longDescription?: string;
 }
 
-const { title, description, image, link, engine, language, year, field, tags = [] } = Astro.props;
+const { id, title, description, image, engine, language, year, field, tags = [] } = Astro.props;
 
 // Build combined tags from explicit fields + extra tags
 const allTags: { label: string; category: string }[] = [];
@@ -24,57 +26,35 @@ tags.forEach((t) => allTags.push({ label: t, category: "other" }));
 
 <div
   class="project-card group"
+  data-project-id={id}
   data-engine={engine?.toLowerCase() || ""}
   data-language={language?.toLowerCase() || ""}
   data-year={year || ""}
   data-field={field?.toLowerCase() || ""}
   data-tags={tags.map(t => t.toLowerCase()).join(",")}
+  role="button"
+  tabindex="0"
 >
-  {link ? (
-    <a href={link} target="_blank" rel="noopener noreferrer" class="block h-full">
-      <div class="card-inner">
-        <div class="card-image">
-          {image ? (
-            <img src={image} alt={title} loading="lazy" />
-          ) : (
-            <div class="card-placeholder">
-              <span>🎮</span>
-            </div>
-          )}
+  <div class="card-inner">
+    <div class="card-image">
+      {image ? (
+        <img src={image} alt={title} loading="lazy" />
+      ) : (
+        <div class="card-placeholder">
+          <span>🎮</span>
         </div>
-        <div class="card-body">
-          <h3 class="card-title">{title}</h3>
-          <p class="card-desc">{description}</p>
-          <div class="card-tags">
-            {allTags.map(({ label, category }) => (
-              <span class={`card-tag tag-${category}`}>{label}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </a>
-  ) : (
-    <div class="card-inner h-full">
-      <div class="card-image">
-        {image ? (
-          <img src={image} alt={title} loading="lazy" />
-        ) : (
-          <div class="card-placeholder">
-            <span>🎮</span>
-          </div>
-        )}
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">{title}</h3>
-        <p class="card-desc">{description}</p>
-        <div class="card-tags">
-          {allTags.map(({ label, category }) => (
-            <span class={`card-tag tag-${category}`}>{label}</span>
-          ))}
-        </div>
+      )}
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">{title}</h3>
+      <p class="card-desc">{description}</p>
+      <div class="card-tags">
+        {allTags.map(({ label, category }) => (
+          <span class={`card-tag tag-${category}`}>{label}</span>
+        ))}
       </div>
     </div>
-  )}
+  </div>
 </div>
 
 <style>

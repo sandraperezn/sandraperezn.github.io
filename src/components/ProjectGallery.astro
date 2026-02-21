@@ -1,5 +1,6 @@
 ---
 import ProjectCard from "./ProjectCard.astro";
+import ProjectDetail from "./ProjectDetail.astro";
 
 interface Project {
   title: string;
@@ -11,6 +12,7 @@ interface Project {
   year?: string;
   field?: string;
   tags?: string[];
+  longDescription?: string;
 }
 
 interface Props {
@@ -18,6 +20,9 @@ interface Props {
 }
 
 const { projects } = Astro.props;
+
+// Add IDs to projects
+const projectsWithIds = projects.map((p, i) => ({ ...p, id: `project-${i}` }));
 
 // Extract unique filter values
 const engines = [...new Set(projects.map((p) => p.engine).filter(Boolean))] as string[];
@@ -28,9 +33,11 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags || []).filter(Boolean
 ---
 
 <div class="project-gallery" id="project-gallery">
-  <!-- Filter Bar -->
-  <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all" data-category="all">All</button>
+  <!-- Gallery View -->
+  <div class="gallery-view" id="gallery-view">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all" data-category="all">All</button>
 
     {engines.length > 0 && (
       <div class="filter-section" data-section="engine">
@@ -145,13 +152,21 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags || []).filter(Boolean
 
   <!-- Gallery Grid -->
   <div class="gallery-grid">
-    {projects.map((project) => (
+    {projectsWithIds.map((project) => (
       <ProjectCard {...project} />
     ))}
   </div>
 
   <div class="gallery-count">
     <span class="text-secondary">$</span> ls projects/ | showing <span id="visible-count">{projects.length}</span> of {projects.length}
+  </div>
+  </div>
+
+  <!-- Detail Views (hidden by default) -->
+  <div class="detail-view" id="detail-view" style="display: none;">
+    {projectsWithIds.map((project) => (
+      <ProjectDetail {...project} />
+    ))}
   </div>
 </div>
 
@@ -300,11 +315,67 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags || []).filter(Boolean
     const gallery = document.getElementById("project-gallery");
     if (!gallery) return;
 
+    const galleryView = gallery.querySelector("#gallery-view") as HTMLElement;
+    const detailView = gallery.querySelector("#detail-view") as HTMLElement;
     const filterBtns = gallery.querySelectorAll<HTMLButtonElement>(".filter-btn");
     const filterTitles = gallery.querySelectorAll<HTMLButtonElement>(".filter-title");
     const filterSections = gallery.querySelectorAll<HTMLElement>(".filter-section");
     const cards = gallery.querySelectorAll<HTMLElement>(".project-card");
     const countEl = gallery.querySelector("#visible-count");
+    const details = gallery.querySelectorAll<HTMLElement>(".project-detail");
+    const backBtns = gallery.querySelectorAll<HTMLButtonElement>("[data-action='back-to-gallery']");
+
+    // Show project detail
+    function showDetail(projectId: string) {
+      galleryView.style.display = "none";
+      detailView.style.display = "block";
+      
+      // Hide all details, show the selected one
+      details.forEach((detail) => {
+        if (detail.dataset.detailId === projectId) {
+          detail.style.display = "block";
+        } else {
+          detail.style.display = "none";
+        }
+      });
+    }
+
+    // Show gallery
+    function showGallery() {
+      galleryView.style.display = "block";
+      detailView.style.display = "none";
+      details.forEach((detail) => {
+        detail.style.display = "none";
+      });
+    }
+
+    // Click on project card to open detail
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const projectId = card.dataset.projectId;
+        if (projectId) {
+          showDetail(projectId);
+        }
+      });
+
+      // Keyboard accessibility
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          const projectId = card.dataset.projectId;
+          if (projectId) {
+            showDetail(projectId);
+          }
+        }
+      });
+    });
+
+    // Back button
+    backBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        showGallery();
+      });
+    });
 
     // Toggle dropdown sections
     filterTitles.forEach((title) => {

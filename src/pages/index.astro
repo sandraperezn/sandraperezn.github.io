@@ -46,10 +46,12 @@ const projects: Array<{
   year?: string;
   field?: string;
   tags?: string[];
+  longDescription?: string;
 }> = [
   {
     title: "Hold Up",
     description: "A cozy productivity game about meeting deadlines",
+    longDescription: "Hold Up is a cozy productivity game where you help characters meet their deadlines. Developed during a game jam, this project taught me a lot about rapid prototyping and working under pressure.",
     engine: "Unity",
     language: "C#", 
     year: "2023-2024",
@@ -193,7 +195,7 @@ const projects: Array<{
   </head>
   <body class="font-sans">
     <MatrixBackground
-      highlightColor="rgba(222, 133, 74, 0.2)"
+      highlightColor="rgba(230, 144, 214, 0.25)"
       boxSize={40}
       movementSpeed={0.1}
       movementDirection="up-left"
@@ -205,12 +207,14 @@ const projects: Array<{
 
       <!-- ═══ Folders ═══ -->
       <DesktopFolder id="about" title="about_me" icon="📁" x={40} y={30} openByDefault={true} />
-      <DesktopFolder id="projects" title="projects" icon="📁" x={40} y={150} />
+      <DesktopFolder id="projects" title="projects" icon="📁" x={40} y={130} />
+      <DesktopFolder id="experience" title="experience" icon="📁" x={40} y={230} />
+      <DesktopFolder id="education" title="education" icon="📁" x={40} y={330} />
       {allPosts.length > 0 && (
-        <DesktopFolder id="blog" title="blog" icon="📁" x={40} y={270} />
+        <DesktopFolder id="blog" title="blog" icon="📁" x={40} y={430} />
       )}
-      <DesktopFolder id="contact" title="contact" icon="📁" x={40} y={390} />
-      <DesktopFolder id="skills" title="tech_stack" icon="📁" x={40} y={510} />
+      <DesktopFolder id="contact" title="contact" icon="📁" x={40} y={530} />
+      <DesktopFolder id="skills" title="tech_stack" icon="📁" x={40} y={630} />
 
       <!-- ═══ Windows ═══ -->
 
@@ -273,16 +277,82 @@ const projects: Array<{
         <ProjectGallery projects={projects} />
       </DesktopWindow>
 
+      <!-- Experience Window -->
+      <DesktopWindow id="experience" title="~/experience" width="600px" height="450px">
+        <div class="text-xs">
+          <SectionHeading>💼 work experience</SectionHeading>
+          
+          <div class="space-y-4 mt-4">
+            <div class="experience-item p-3 bg-gray-200/50 dark:bg-gray-500/10 rounded-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-semibold text-primary" style="color: var(--color-primary);">Job Title</h3>
+                <span class="text-muted text-xs">2024 - Present</span>
+              </div>
+              <p class="text-accent font-medium text-sm mb-2">Company Name</p>
+              <p class="text-muted text-xs leading-relaxed">
+                Description of your role and responsibilities. What did you achieve? What technologies did you use?
+              </p>
+            </div>
+
+            <div class="experience-item p-3 bg-gray-200/50 dark:bg-gray-500/10 rounded-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-semibold text-primary" style="color: var(--color-primary);">Previous Job</h3>
+                <span class="text-muted text-xs">2022 - 2024</span>
+              </div>
+              <p class="text-accent font-medium text-sm mb-2">Previous Company</p>
+              <p class="text-muted text-xs leading-relaxed">
+                Description of your previous role. Highlight key achievements and skills developed.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-2 border-t border-gray-300 dark:border-gray-700 text-muted text-xs">
+            <span class="text-secondary">$</span> cat experience.txt
+          </div>
+        </div>
+      </DesktopWindow>
+
+      <!-- Education Window -->
+      <DesktopWindow id="education" title="~/education" width="600px" height="450px">
+        <div class="text-xs">
+          <SectionHeading>🎓 education</SectionHeading>
+          
+          <div class="space-y-4 mt-4">
+            <div class="education-item p-3 bg-gray-200/50 dark:bg-gray-500/10 rounded-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-semibold text-primary" style="color: var(--color-primary);">Game Development Degree</h3>
+                <span class="text-muted text-xs">2023 - Present</span>
+              </div>
+              <p class="text-accent font-medium text-sm mb-2">University Name, Barcelona</p>
+              <p class="text-muted text-xs leading-relaxed">
+                3rd year student. Focusing on game programming, design, and development. 
+                Learning Unity, Unreal Engine, and various programming languages.
+              </p>
+            </div>
+
+            <div class="education-item p-3 bg-gray-200/50 dark:bg-gray-500/10 rounded-lg">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-semibold text-primary" style="color: var(--color-primary);">High School Diploma</h3>
+                <span class="text-muted text-xs">2019 - 2023</span>
+              </div>
+              <p class="text-accent font-medium text-sm mb-2">High School Name</p>
+              <p class="text-muted text-xs leading-relaxed">
+                Relevant coursework or achievements during high school.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-2 border-t border-gray-300 dark:border-gray-700 text-muted text-xs">
+            <span class="text-secondary">$</span> cat education.txt
+          </div>
+        </div>
+      </DesktopWindow>
+
       <!-- Blog Window -->
       {allPosts.length > 0 && (
-        <DesktopWindow id="experience" title="~/blog" width="600px" height="420px">
+        <DesktopWindow id="blog" title="~/blog" width="600px" height="420px">
           <div class="text-xs">
             <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-300 dark:border-gray-600">
-              <div class="flex gap-2">
-                <div class="w-2 h-2 rounded-full bg-red-500 opacity-60"></div>
-                <div class="w-2 h-2 rounded-full bg-yellow-500 opacity-60"></div>
-                <div class="w-2 h-2 rounded-full bg-green-500 opacity-60"></div>
-              </div>
               <span class="text-muted text-xs ml-2 hidden sm:inline">~/blog</span>
             </div>
 
@@ -327,11 +397,6 @@ const projects: Array<{
       <DesktopWindow id="skills" title="~/tech_stack" width="550px" height="380px">
         <div class="text-xs">
           <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-300 dark:border-gray-600">
-            <div class="flex gap-2">
-              <div class="w-2 h-2 rounded-full bg-red-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-yellow-500 opacity-60"></div>
-              <div class="w-2 h-2 rounded-full bg-green-500 opacity-60"></div>
-            </div>
             <span class="text-muted text-xs ml-2 hidden sm:inline">~/tech_stack</span>
           </div>
 
