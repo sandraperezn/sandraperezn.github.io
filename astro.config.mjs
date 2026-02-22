@@ -8,6 +8,6 @@ export default defineConfig({
     sitemap(),
     tailwind(),
   ],
-  site: "https://sandraptrsn.github.io",
+  site: "https://sandraperezn.github.io",
   compressHTML: true,
 });
